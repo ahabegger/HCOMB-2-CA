@@ -16,7 +16,7 @@ The goal of Lattice2Backbone is to reconstruct carbon alpha (CA) only backbone s
 
 - [ ] Given N-Possible-Move Lattice Model Return CA Model
 
-- [ ] Testing of Accuracy of Reconstruction Algorithm with inverse PDB2LatticePy
+- [ ] Testing of Accuracy of Reconstruction Algorithm with inverse [PDB2Lattice](https://github.com/ahabegger/PDB-2-Lattice)
 
 ## File Breakdown
 
