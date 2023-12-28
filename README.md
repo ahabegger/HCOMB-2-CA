@@ -1,4 +1,5 @@
 # Lattice-2-Backbone
+### Alexander J. Habegger
 
 Lattice2Backbone is an innovative software tool designed to translate lattice representations of protein structures into carbon alpha (CA)-only backbone structures. It is a complementary counterpart to [PDB2Lattice](https://github.com/ahabegger/PDB-2-Lattice), focusing on converting simplified lattice models into detailed yet streamlined CA backbone structures suitable for extensive biological analysis. This program addresses the need for reconstructing detailed protein structures from their simplified forms, facilitating a deeper understanding of protein folding and function. Lattice2Backbone is particularly valuable in structural biology and bioinformatics, enabling researchers to efficiently bridge the gap between highly abstracted lattice models and more detailed, biologically relevant CA backbone structures.
 
@@ -18,6 +19,5 @@ The goal of Lattice2Backbone is to reconstruct carbon alpha (CA) only backbone s
 
 - [ ] Testing of Accuracy of Reconstruction Algorithm with inverse [PDB2Lattice](https://github.com/ahabegger/PDB-2-Lattice)
 
-## File Breakdown
-
-- **** | 
+## Disclaimer
+This project is part of an academic exercise and is not intended for commercial use.
