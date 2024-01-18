@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 """
 Identify.py
@@ -37,7 +38,12 @@ def get_xyz(file):
     This function is used to get the XYZ coordinates of the atoms
     in the structure.
     """
-    pass
+
+    df = pd.read_csv(file)
+    xyz = df.values.tolist()
+    xyz = np.array(xyz)
+
+    return xyz
 
 
 def identify_structure(xyz):
