@@ -42,3 +42,46 @@ def get_movements(xyz):
         movements[i] = xyz[i + 1] - xyz[i]
 
     return movements
+
+
+def untilt(movements):
+
+
+
+
+    for movement in movements:
+        while not np.any(np.allclose(movement, potential_movements)):
+
+
+def check_valid_movements(movements):
+    """
+    check_valid_movements
+    This function is used to check if the given movements are valid
+    movements.
+    :param movements:
+    :return: True if the given movements are valid movements, False
+    """
+
+    # Math Calculations
+    sqrt_3_div_2 = np.sqrt(3) / 2
+    sqrt_2_div_2 = np.sqrt(2) / 2
+
+    valid_movements = [
+        [1, 0, 0], [-1, 0, 0],
+        [0, 1, 0], [0, -1, 0],
+        [0, 0, 1], [0, 0, -1],
+        [sqrt_3_div_2, 0.5, 0], [-sqrt_3_div_2, 0.5, 0],
+        [sqrt_3_div_2, -0.5, 0], [-sqrt_3_div_2, -0.5, 0],
+        [sqrt_2_div_2, sqrt_2_div_2, 0], [sqrt_2_div_2, 0, sqrt_2_div_2],
+        [0, sqrt_2_div_2, sqrt_2_div_2], [-sqrt_2_div_2, -sqrt_2_div_2, 0],
+        [-sqrt_2_div_2, 0, -sqrt_2_div_2], [0, -sqrt_2_div_2, -sqrt_2_div_2],
+        [sqrt_2_div_2, -sqrt_2_div_2, 0], [sqrt_2_div_2, 0, -sqrt_2_div_2],
+        [0, sqrt_2_div_2, -sqrt_2_div_2], [-sqrt_2_div_2, sqrt_2_div_2, 0],
+        [-sqrt_2_div_2, 0, sqrt_2_div_2], [0, -sqrt_2_div_2, sqrt_2_div_2]
+    ]
+
+    for movement in movements:
+        if not np.any(np.allclose(movement, valid_movements)):
+            return False
+
+    return True
