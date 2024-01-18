@@ -1,6 +1,5 @@
 import argparse
-
-from Identify import valid_xyz_csv
+from Identify import valid_xyz_csv, get_xyz, identify_structure
 
 '''
 main.py
@@ -8,19 +7,21 @@ This file is used to run the program.
 '''
 
 
-def execute():
-    '''
+def execute(csv_file):
+    """
     execute
     This function is used to execute the program.
-    '''
-    pass
+    """
+
+    xyz = get_xyz(csv_file)
+    structure_type = identify_structure(xyz)
 
 
 def argument_parser():
-    '''
+    """
     argument_parser
     This function is used to parse the arguments.
-    '''
+    """
     parser = argparse.ArgumentParser(description='This program is used to convert a structure simplification into a '
                                                  'all atom structure.')
 
@@ -49,4 +50,4 @@ if __name__ == '__main__':
         exit(1)
 
     # Execute Program
-    execute()
+    execute(xyz_csv)
