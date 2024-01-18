@@ -27,3 +27,18 @@ def identify_structure(xyz):
     #print(xyz)
 
 
+def get_movements(xyz):
+    """
+    get_movements
+    This function is used to get the movements of the atoms in the
+    structure.
+    :param xyz:
+    :return: A numpy array of the movements of the atoms in the
+    structure.
+    """
+
+    movements = np.zeros((xyz.shape[0] - 1, xyz.shape[1]))
+    for i in range(len(xyz) - 1):
+        movements[i] = xyz[i + 1] - xyz[i]
+
+    return movements
