@@ -90,4 +90,9 @@ def normalize_xyz(xyz):
     average = amino_acid_distances.mean()
     xyz = xyz / average
 
+    if xyz[0].max() > 0.1:
+        print('Error: The structure is not a valid structure.')
+        print('Structure must start at the origin.')
+        exit(1)
+
     return xyz
