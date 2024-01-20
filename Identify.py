@@ -29,19 +29,52 @@ def identify(xyz):
     :return: The type of structure that is being used.
     """
 
-    # Get the movements of the atoms in the structure
     movements = get_movements(xyz)
 
-    # Get the distance between each movement
-    distances = set()
-    for move1 in movements:
-        for move2 in movements:
-            distance = np.linalg.norm(move1 - move2)
-            distances.add(distance)
-    
-    print(distances)
+    movement_set = []
+    for move in movements:
+        move = move.tolist()
+        if not close_to_any(move, movement_set):
+            movement_set.append(move)
+        neg_move = [-move[0], -move[1], -move[2]]
+        if not close_to_any(neg_move, movement_set):
+            movement_set.append(neg_move)
 
-    return None
+    distance_counter = {
+        0.0: 0,
+        1.0: 0,
+        1.4: 0,
+        1.7: 0,
+        2.0: 0
+    }
+
+    for move in movement_set:
+        for move2 in movement_set:
+            move = np.array(move)
+            move2 = np.array(move2)
+            distance = np.linalg.norm(move - move2)
+
+            if distance < 0.5:
+                distance_counter[0.0] += 1
+            elif distance < 1.2:
+                distance_counter[1.0] += 1
+            elif distance < 1.55:
+                distance_counter[1.4] += 1
+            elif distance < 1.85:
+                distance_counter[1.7] += 1
+            else:
+                distance_counter[2.0] += 1
+
+    if distance_counter[1.0] == 0 and distance_counter[1.7] == 0:
+        if len(movement_set) > 4:
+            return 6
+        else:
+            return 4
+    else:
+        if len(movement_set) > 8:
+            return 12
+        else:
+            return 8
 
 
 def get_movements(xyz):
@@ -72,7 +105,6 @@ def untilt(xyz, structure_code):
 
     # Get the movements of the atoms in the structure
     get_movements(xyz)
-
 
     # Get the structure information
     structure_name, potential_movements = get_structure_info(structure_code)
