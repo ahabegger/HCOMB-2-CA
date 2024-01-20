@@ -7,6 +7,31 @@ used given the XYZ coordinates of the atoms in the structure.
 import numpy as np
 
 
+def identify(xyz):
+    """
+    identify
+    This function is used to identify the type of structure that is
+    being used given the XYZ coordinates of the atoms in the
+    structure.
+    :param xyz:
+    :return: The type of structure that is being used.
+    """
+
+    # Get the movements of the atoms in the structure
+    movements = get_movements(xyz)
+
+    # Get the distance between each movement
+    distances = set()
+    for move1 in movements:
+        for move2 in movements:
+            distance = np.linalg.norm(move1 - move2)
+            distances.add(distance)
+    
+    print(distances)
+
+    return None
+
+
 def get_movements(xyz):
     """
     get_movements
@@ -24,17 +49,28 @@ def get_movements(xyz):
     return movements
 
 
-def untilt(movements):
-    for i in range(360):
-        print(i)
-        for j in range(360):
-            for k in range(360):
-                rotated_movements = rotate_movements(movements, i, j, k)
-                if check_valid_movements(rotated_movements):
-                    return rotated_movements
+def untilt(xyz, structure_code):
+    """
+    untilt
+    This function is used to untilt the structure.
+    :param xyz:
+    :param structure_code:
+    :return: The untilted structure.
+    """
 
-    print("Error: Unable to untilt the structure.")
-    exit(1)
+    # Get the movements of the atoms in the structure
+    get_movements(xyz)
+
+
+    # Get the structure information
+    structure_name, potential_movements = get_structure_info(structure_code)
+
+    print('Structure Name: ' + structure_name)
+    print('Structure Code: ' + str(structure_code))
+    print('Movements: ' + str(movements))
+    print('Potential Movements: ' + str(potential_movements))
+
+    return None
 
 
 def rotate_movements(movements, degree_x, degree_y, degree_z):
@@ -61,7 +97,54 @@ def rotate_movements(movements, degree_x, degree_y, degree_z):
     return changed_movements
 
 
-def check_valid_movements(movements):
+def get_structure_info(num_moves):
+    """
+    Get the name and movements for a given number of moves.
+    :param num_moves:
+    :return: structure_name, movements
+    """
+
+    # Define Math Calculations
+    sqrt_3_div_2 = np.sqrt(3) / 2
+    sqrt_2_div_2 = np.sqrt(2) / 2
+
+    # Return Structure Name and Movements
+    if num_moves == 4:
+        return ("SQUARE TILING",
+                [
+                    [1, 0, 0],
+                    [-1, 0, 0],
+                    [0, 1, 0],
+                    [0, -1, 0]
+                ])
+    elif num_moves == 6:
+        return ("CUBIC HONEYCOMB",
+                [
+                    [1, 0, 0], [-1, 0, 0],
+                    [0, 1, 0], [0, -1, 0],
+                    [0, 0, 1], [0, 0, -1]
+                ])
+    elif num_moves == 8:
+        return ("TRIANGULAR PRISMATIC HONEYCOMB",
+                [
+                    [sqrt_3_div_2, 0.5, 0], [-sqrt_3_div_2, 0.5, 0],
+                    [0, 1, 0], [sqrt_3_div_2, -0.5, 0],
+                    [-sqrt_3_div_2, -0.5, 0], [0, -1, 0],
+                    [0, 0, 1], [0, 0, -1]
+                ])
+    elif num_moves == 12:
+        return ("TETRAHEDRAL-OCTAHEDRAL HONEYCOMB",
+                [
+                    [sqrt_2_div_2, sqrt_2_div_2, 0], [sqrt_2_div_2, 0, sqrt_2_div_2],
+                    [0, sqrt_2_div_2, sqrt_2_div_2], [-sqrt_2_div_2, -sqrt_2_div_2, 0],
+                    [-sqrt_2_div_2, 0, -sqrt_2_div_2], [0, -sqrt_2_div_2, -sqrt_2_div_2],
+                    [sqrt_2_div_2, -sqrt_2_div_2, 0], [sqrt_2_div_2, 0, -sqrt_2_div_2],
+                    [0, sqrt_2_div_2, -sqrt_2_div_2], [-sqrt_2_div_2, sqrt_2_div_2, 0],
+                    [-sqrt_2_div_2, 0, sqrt_2_div_2], [0, -sqrt_2_div_2, sqrt_2_div_2]
+                ])
+
+
+def check_valid_movements(movements, potential_movements):
     """
     check_valid_movements
     This function is used to check if the given movements are valid
@@ -70,26 +153,8 @@ def check_valid_movements(movements):
     :return: True if the given movements are valid movements, False
     """
 
-    # Math Calculations
-    sqrt_3_div_2 = np.sqrt(3) / 2
-    sqrt_2_div_2 = np.sqrt(2) / 2
-
-    valid_movements = [
-        [1, 0, 0], [-1, 0, 0],
-        [0, 1, 0], [0, -1, 0],
-        [0, 0, 1], [0, 0, -1],
-        [sqrt_3_div_2, 0.5, 0], [-sqrt_3_div_2, 0.5, 0],
-        [sqrt_3_div_2, -0.5, 0], [-sqrt_3_div_2, -0.5, 0],
-        [sqrt_2_div_2, sqrt_2_div_2, 0], [sqrt_2_div_2, 0, sqrt_2_div_2],
-        [0, sqrt_2_div_2, sqrt_2_div_2], [-sqrt_2_div_2, -sqrt_2_div_2, 0],
-        [-sqrt_2_div_2, 0, -sqrt_2_div_2], [0, -sqrt_2_div_2, -sqrt_2_div_2],
-        [sqrt_2_div_2, -sqrt_2_div_2, 0], [sqrt_2_div_2, 0, -sqrt_2_div_2],
-        [0, sqrt_2_div_2, -sqrt_2_div_2], [-sqrt_2_div_2, sqrt_2_div_2, 0],
-        [-sqrt_2_div_2, 0, sqrt_2_div_2], [0, -sqrt_2_div_2, sqrt_2_div_2]
-    ]
-
     for movement in movements:
-        if not np.any(np.allclose(movement, valid_movements)):
+        if not np.any(np.allclose(movement, potential_movements)):
             return False
 
     return True
