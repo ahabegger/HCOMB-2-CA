@@ -4,7 +4,8 @@ This file is used to run the program.
 """
 
 import argparse
-from Identify import untilt
+from Identify import identify
+from Moves import get_moves
 from Preprocessing import valid_xyz_csv, get_xyz, normalize_xyz
 
 
@@ -17,7 +18,12 @@ def execute(csv_file):
 
     xyz = get_xyz(csv_file)
     xyz = normalize_xyz(xyz)
-    xyz = untilt(xyz, structure_number)
+    structure_code, structure_name = identify(xyz)
+
+    print('Structure Identified as ' + structure_name)
+    print('Structure Code: ' + str(structure_code))
+
+    moves = get_moves(xyz, structure_code)
 
 
 def argument_parser():
@@ -32,7 +38,6 @@ def argument_parser():
     # Add Arguments
     parser.add_argument('csv', metavar='csv', type=str, nargs=1, help='The csv file that contains the xyz coordinates '
                                                                       'of structure simplification.')
-
                                                                             
     # Execute the parse_args() method
     user_inputs = parser.parse_args()
