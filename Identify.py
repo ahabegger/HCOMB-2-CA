@@ -1,22 +1,9 @@
 """
 Identify.py
-This file is used to identify the type of structure that is being
-used given the XYZ coordinates of the atoms in the structure.
+This file is used to identify the type of structure that is being used.
 """
 
 import numpy as np
-
-
-def close_to_any(main_vector, set_of_vectors, threshold=0.15):
-
-    for vector in set_of_vectors:
-        vector = np.array(vector)
-        main_vector = np.array(main_vector)
-        distance = np.linalg.norm(main_vector - vector)
-        if distance < threshold:
-            return True
-
-    return False
 
 
 def identify(xyz):
@@ -67,14 +54,14 @@ def identify(xyz):
 
     if distance_counter[1.0] == 0 and distance_counter[1.7] == 0:
         if len(movement_set) > 4:
-            return 6
+            return 6, "CUBIC HONEYCOMB"
         else:
-            return 4
+            return 4, "SQUARE TILING"
     else:
         if len(movement_set) > 8:
-            return 12
+            return 12, "TETRAHEDRAL-OCTAHEDRAL HONEYCOMB"
         else:
-            return 8
+            return 8, "TRIANGULAR PRISMATIC HONEYCOMB"
 
 
 def get_movements(xyz):
@@ -94,111 +81,23 @@ def get_movements(xyz):
     return movements
 
 
-def untilt(xyz, structure_code):
+def close_to_any(main_vector, set_of_vectors, threshold=0.15):
     """
-    untilt
-    This function is used to untilt the structure.
-    :param xyz:
-    :param structure_code:
-    :return: The untilted structure.
-    """
-
-    # Get the movements of the atoms in the structure
-    get_movements(xyz)
-
-    # Get the structure information
-    structure_name, potential_movements = get_structure_info(structure_code)
-
-    print('Structure Name: ' + structure_name)
-    print('Structure Code: ' + str(structure_code))
-    print('Movements: ' + str(movements))
-    print('Potential Movements: ' + str(potential_movements))
-
-    return None
-
-
-def rotate_movements(movements, degree_x, degree_y, degree_z):
-    # Convert degrees to radians
-    angles_rad_x = np.radians(degree_x)
-    angles_rad_y = np.radians(degree_y)
-    angles_rad_z = np.radians(degree_z)
-
-    # Compute sin and cos for each angle
-    sin_x, cos_x = np.sin(angles_rad_x), np.cos(angles_rad_x)
-    sin_y, cos_y = np.sin(angles_rad_y), np.cos(angles_rad_y)
-    sin_z, cos_z = np.sin(angles_rad_z), np.cos(angles_rad_z)
-
-    # Directly compute the combined rotation matrix
-    rotation_matrix = np.array([
-        [cos_y * cos_z, cos_z * sin_x * sin_y - cos_x * sin_z, sin_x * sin_z + cos_x * cos_z * sin_y],
-        [cos_y * sin_z, cos_x * cos_z + sin_x * sin_y * sin_z, cos_x * sin_y * sin_z - cos_z * sin_x],
-        [-sin_y, cos_y * sin_x, cos_x * cos_y]
-    ])
-
-    # Apply the rotation to the movements
-    changed_movements = np.dot(movements, rotation_matrix)
-
-    return changed_movements
-
-
-def get_structure_info(num_moves):
-    """
-    Get the name and movements for a given number of moves.
-    :param num_moves:
-    :return: structure_name, movements
+    close_to_any
+    This function is used to determine if a vector is close to any
+    vector in a set of vectors.
+    :param main_vector:
+    :param set_of_vectors:
+    :param threshold:
+    :return: True if the vector is close to any vector in the set of
+    vectors, False otherwise.
     """
 
-    # Define Math Calculations
-    sqrt_3_div_2 = np.sqrt(3) / 2
-    sqrt_2_div_2 = np.sqrt(2) / 2
+    for vector in set_of_vectors:
+        vector = np.array(vector)
+        main_vector = np.array(main_vector)
+        distance = np.linalg.norm(main_vector - vector)
+        if distance < threshold:
+            return True
 
-    # Return Structure Name and Movements
-    if num_moves == 4:
-        return ("SQUARE TILING",
-                [
-                    [1, 0, 0],
-                    [-1, 0, 0],
-                    [0, 1, 0],
-                    [0, -1, 0]
-                ])
-    elif num_moves == 6:
-        return ("CUBIC HONEYCOMB",
-                [
-                    [1, 0, 0], [-1, 0, 0],
-                    [0, 1, 0], [0, -1, 0],
-                    [0, 0, 1], [0, 0, -1]
-                ])
-    elif num_moves == 8:
-        return ("TRIANGULAR PRISMATIC HONEYCOMB",
-                [
-                    [sqrt_3_div_2, 0.5, 0], [-sqrt_3_div_2, 0.5, 0],
-                    [0, 1, 0], [sqrt_3_div_2, -0.5, 0],
-                    [-sqrt_3_div_2, -0.5, 0], [0, -1, 0],
-                    [0, 0, 1], [0, 0, -1]
-                ])
-    elif num_moves == 12:
-        return ("TETRAHEDRAL-OCTAHEDRAL HONEYCOMB",
-                [
-                    [sqrt_2_div_2, sqrt_2_div_2, 0], [sqrt_2_div_2, 0, sqrt_2_div_2],
-                    [0, sqrt_2_div_2, sqrt_2_div_2], [-sqrt_2_div_2, -sqrt_2_div_2, 0],
-                    [-sqrt_2_div_2, 0, -sqrt_2_div_2], [0, -sqrt_2_div_2, -sqrt_2_div_2],
-                    [sqrt_2_div_2, -sqrt_2_div_2, 0], [sqrt_2_div_2, 0, -sqrt_2_div_2],
-                    [0, sqrt_2_div_2, -sqrt_2_div_2], [-sqrt_2_div_2, sqrt_2_div_2, 0],
-                    [-sqrt_2_div_2, 0, sqrt_2_div_2], [0, -sqrt_2_div_2, sqrt_2_div_2]
-                ])
-
-
-def check_valid_movements(movements, potential_movements):
-    """
-    check_valid_movements
-    This function is used to check if the given movements are valid
-    movements.
-    :param movements:
-    :return: True if the given movements are valid movements, False
-    """
-
-    for movement in movements:
-        if not np.any(np.allclose(movement, potential_movements)):
-            return False
-
-    return True
+    return False
