@@ -7,19 +7,6 @@ used given the XYZ coordinates of the atoms in the structure.
 import numpy as np
 
 
-def identify_structure(xyz):
-    """
-    identify_structure
-    This function is used to identify the type of structure that is
-    being used given the XYZ coordinates of the atoms in the structure.
-    :param xyz:
-    """
-
-    movements = get_movements(xyz)
-    movements = untilt(movements)
-    print(movements)
-
-
 def get_movements(xyz):
     """
     get_movements

@@ -8,7 +8,7 @@ from Identify import identify_structure
 from Preprocessing import valid_xyz_csv, get_xyz, normalize_xyz
 
 
-def execute(csv_file):
+def execute(csv_file, structure_number):
     """
     execute
     This function is used to execute the program.
@@ -32,7 +32,10 @@ def argument_parser():
     # Add Arguments
     parser.add_argument('csv', metavar='csv', type=str, nargs=1, help='The csv file that contains the xyz coordinates '
                                                                       'of structure simplification.')
-
+    parser.add_argument('simplification', metavar='simplification', type=str, nargs=1, help='The structure '
+                                                                                             'simplification number '
+                                                                                             'inputs are 4, 6, 8, 12.') 
+                                                                            
     # Execute the parse_args() method
     user_inputs = parser.parse_args()
 
@@ -44,6 +47,7 @@ if __name__ == '__main__':
     args = argument_parser()
 
     xyz_csv = args.csv[0]
+    structure_type = args.simplification[0]
 
     if xyz_csv is None:
         print('Error: No csv file was given.')
@@ -55,5 +59,15 @@ if __name__ == '__main__':
         print('Error: The csv file given is not a valid xyz csv file.')
         exit(1)
 
+    if structure_type is None:
+        print('Error: No structure type was given.')
+        exit(1)
+
+    if structure_type not in ['4', '6', '8', '12']:
+        print('Error: The structure type given is not valid.')
+        exit(1)
+    else:
+        structure_type = int(structure_type)    
+
     # Execute Program
-    execute(xyz_csv)
+    execute(xyz_csv, structure_type)
