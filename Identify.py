@@ -7,6 +7,18 @@ used given the XYZ coordinates of the atoms in the structure.
 import numpy as np
 
 
+def close_to_any(main_vector, set_of_vectors, threshold=0.15):
+
+    for vector in set_of_vectors:
+        vector = np.array(vector)
+        main_vector = np.array(main_vector)
+        distance = np.linalg.norm(main_vector - vector)
+        if distance < threshold:
+            return True
+
+    return False
+
+
 def identify(xyz):
     """
     identify
