@@ -1,13 +1,21 @@
 """
 Moves.py
-
+This file is used to get the moves from the movement vectors.
 """
-import numpy as np
 
+import numpy as np
 from Identify import get_movements
 
 
 def get_moves(xyz, structure_code):
+    """
+    get_moves
+    This function is used to get the moves from the movement vectors.
+    :param xyz:
+    :param structure_code:
+    :return:
+    """
+
     movement_vectors = get_movements(xyz)
 
     if structure_code == 4:
@@ -24,6 +32,14 @@ def get_moves(xyz, structure_code):
 
 
 def get_moves_4(movement_vectors):
+    """
+    get_moves_4
+    This function is used to get the moves from the movement vectors
+    for Square Tiling Structure Simplifications.
+    :param movement_vectors:
+    :return: move_set
+    """
+
     moves = []
     potential_moves = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, -0]]
 
@@ -50,6 +66,14 @@ def get_moves_4(movement_vectors):
 
 
 def get_moves_6(movement_vectors):
+    """
+    get_moves_6
+    This function is used to get the moves from the movement vectors
+    for Cubic Honeycomb Structure Simplifications.
+    :param movement_vectors:
+    :return: move_set
+    """
+
     moves = []
     potential_moves = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, -0], [0, 0, 1], [0, 0, -1]]
 
@@ -80,6 +104,14 @@ def get_moves_6(movement_vectors):
 
 
 def get_moves_8(movement_vectors):
+    """
+    get_moves_8
+    This function is used to get the moves from the movement vectors
+    for Triangular Prismatic Honeycomb Structure Simplifications.
+    :param movement_vectors:
+    :return: move_set
+    """
+
     moves = []
     sqrt_3_div_2 = np.sqrt(3) / 2
     potential_moves = [
@@ -119,6 +151,14 @@ def get_moves_8(movement_vectors):
 
 
 def get_moves_12(movement_vectors):
+    """
+    get_moves_12
+    This function is used to get the moves from the movement vectors
+    for Tetrahedral-Octahedral Honeycomb Structure Simplifications.
+    :param movement_vectors:
+    :return: move_set
+    """
+
     moves = []
     sqrt_2_div_2 = np.sqrt(2) / 2
     potential_moves = [
