@@ -151,3 +151,30 @@ def get_input_value(acids, moves):
     inputs.append(acids[-1])
 
     return inputs
+
+
+def convert_to_pdb(xyz, acids, structure_name):
+    """
+    convert_to_pdb
+    :param xyz:
+    :param acids:
+    :param structure_name:
+    :return: pdb_file
+    """
+
+    # Multiple the xyz by 3.8 to get angstroms distances between CA
+    xyz = xyz * 3.8
+
+    # Create the pdb file
+    pdb_file_location = 'structure.pdb'
+    pdb_file = open(pdb_file_location, 'w')
+    pdb_file.write('HEADER    ' + structure_name + '\n')
+    for i in range(len(xyz)):
+        atom_line = ("ATOM  " + str(i + 1).rjust(5) + "  CA  " + acids[i] + " A" + str(i + 1).rjust(4) + "    " +
+                     f"{xyz[i][0]:8.3f}".rjust(7) +
+                     f"{xyz[i][1]:8.3f}".rjust(8) +
+                     f"{xyz[i][2]:8.3f}".rjust(8) + "                       C\n")
+        pdb_file.write(atom_line)
+    pdb_file.write('END')
+
+    return pdb_file_location
