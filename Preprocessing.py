@@ -69,9 +69,9 @@ def get_amino_acid_distances(xyz):
     return np.array(amino_acid_distances)
 
 
-def normalize_xyz(xyz):
+def check_normalize_xyz(xyz):
     """
-    normalize_xyz
+    check_normalize_xyz
     This function is used to normalize the XYZ coordinates of the atoms
     in the structure.
     :param xyz:
@@ -96,3 +96,25 @@ def normalize_xyz(xyz):
         exit(1)
 
     return xyz
+
+
+def normalize_xyz(xyz):
+    """
+    normalize_xyz
+    This function is used to normalize the XYZ coordinates of the atoms
+    in the structure.
+    :param xyz:
+    :return: A numpy array of the normalized XYZ coordinates of the atoms
+    """
+
+    amino_acid_distances = get_amino_acid_distances(xyz)
+
+    # Normalize the xyz coordinates
+    average = amino_acid_distances.mean()
+    xyz = xyz / average
+
+    # for each row subtract the first row
+    for i in range(len(xyz)):
+        xyz[i] = xyz[i] - xyz[0]
+
+    return xyz.flatten()
