@@ -118,3 +118,36 @@ def normalize_xyz(xyz):
         xyz[i] = xyz[i] - xyz[0]
 
     return xyz.flatten()
+
+
+def get_acids(xyz_csv):
+    """
+    get_acids
+    This function is used to get the amino acids in the structure.
+    :param xyz_csv:
+    :return: A numpy array of the amino acids in the structure.
+    """
+
+    df = pd.read_csv(xyz_csv)
+    acids = df['Amino Acid'].values.tolist()
+    acids = np.array(acids)
+
+    return acids
+
+
+def get_input_value(acids, moves):
+    """
+    get_input_value
+    This function is used to get the input value for the neural network.
+    :param acids:
+    :param moves:
+    :return: inputs
+    """
+
+    inputs = []
+    for i in range(len(moves)):
+        inputs.append(acids[i])
+        inputs.append(moves[i])
+    inputs.append(acids[-1])
+
+    return inputs
