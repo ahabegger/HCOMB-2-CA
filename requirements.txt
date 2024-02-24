@@ -1,0 +1,9 @@
+pip~=22.3.1
+wheel~=0.38.4
+pytz~=2023.3.post1
+numpy~=1.26.3
+setuptools~=65.5.1
+pandas~=2.1.4
+python-dateutil~=2.8.2
+six~=1.16.0
+fastjsonschema~=2.19.1
